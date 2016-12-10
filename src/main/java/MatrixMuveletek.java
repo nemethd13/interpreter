@@ -49,11 +49,10 @@ public class MatrixMuveletek {
                     R[i][j] = A[0] * B[i][j];
                 }
             }
+            printMatrix(R);
         } else {
             System.out.println("Nem megfelelo matrixok konstan x matrix muvelethez!");
-            return;
         }
-        printMatrix(R);
     }
 
     public static void mulMatrices(double A[][], double B[][]) {
@@ -74,14 +73,57 @@ public class MatrixMuveletek {
             printMatrix(R);
         } else {
             System.out.println("A ket matrix nem osszeszorozhato!");
-
         }
     }
 
     public static void inverse(double A[][]) {
 
+        double subMatrix[][] = new double[2][2];
+
         if(x2x2(A)) {
-            double konstans = 1 / ( (A[0][0] * A[1][1]) - 
+
+            double multiplier[] = {1 / ( (A[0][0] * A[1][1]) - (A[0][1] * A[1][0]) )};
+
+            subMatrix[0][0] = A[1][1];
+            subMatrix[0][1] = - A[0][1];
+            subMatrix[1][0] = - A[1][0];
+            subMatrix[1][1] = A[0][0];
+
+            konstansSzorzas(multiplier, subMatrix);
+
+        } else {
+            System.out.println("Nem 2x2 matrix.");
+        }
+    }
+
+    public static void determinant(double A[][]) {
+
+        double det;
+
+        if(x2x2(A)) {
+
+            det = ( (A[0][0] * A[1][1]) - (A[0][1] * A[1][0]) );
+
+            System.out.println(det);
+        } else {
+            System.out.println("Nem 2x2 matrix.");
+        }
+    }
+
+    public static void transponse(double A[][]) {
+
+        double transponsed[][] = new double[A[0].length][A.length];
+
+        if(x2x2(A)) {
+
+            for (int i = 0; i < A.length; i++) {
+                for (int j = 0; j < A[0].length; j++) {
+                    transponsed[j][i] = A[i][j];
+                }
+            }
+            printMatrix(transponsed);
+        } else {
+            System.out.println("Nem 2x2 matrix.");
         }
     }
 
@@ -133,6 +175,11 @@ public class MatrixMuveletek {
                         {1, 2, 3}
         };
 
+        double P5[][] = {
+                {2, 0},
+                {1, 1}
+        };
+
         double K[] = {10};
 
         osszeadas(P1, P2);
@@ -142,6 +189,11 @@ public class MatrixMuveletek {
         konstansSzorzas(K, P1);
         System.out.println();
         mulMatrices(P1,P2);
-
+        System.out.println();
+        inverse(P5);
+        System.out.println();
+        determinant(P1);
+        System.out.println();
+        transponse(P5);
     }
 }
