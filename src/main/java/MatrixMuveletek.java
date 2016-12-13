@@ -1,8 +1,10 @@
-
+import static java.lang.Math.*;
 
 public class MatrixMuveletek {
 
-    public static void osszeadas(double A[][],double B[][]) {
+    private static final double EPSILON = 1e-10;
+
+    private static void osszeadas(double A[][],double B[][]) {
 
         double R[][] = new double[2][2];
 
@@ -20,7 +22,7 @@ public class MatrixMuveletek {
         printMatrix(R);
     }
 
-    public static void kivonas(double A[][],double B[][]) {
+    private static void kivonas(double A[][],double B[][]) {
 
         double R[][] = new double[2][2];
 
@@ -38,7 +40,7 @@ public class MatrixMuveletek {
         printMatrix(R);
     }
 
-    public static void konstansSzorzas(double A[],double B[][]) {
+    private static void konstansSzorzas(double A[],double B[][]) {
 
         double R[][] = new double[2][2];
 
@@ -55,7 +57,7 @@ public class MatrixMuveletek {
         }
     }
 
-    public static void mulMatrices(double A[][], double B[][]) {
+    private static void mulMatrices(double A[][], double B[][]) {
 
         double sum;
         double R[][] = new double[A.length][B[0].length];
@@ -76,7 +78,7 @@ public class MatrixMuveletek {
         }
     }
 
-    public static void inverse(double A[][]) {
+    private static void inverse(double A[][]) {
 
         double subMatrix[][] = new double[2][2];
 
@@ -96,7 +98,7 @@ public class MatrixMuveletek {
         }
     }
 
-    public static void determinant(double A[][]) {
+    private static void determinant(double A[][]) {
 
         double det;
 
@@ -110,7 +112,7 @@ public class MatrixMuveletek {
         }
     }
 
-    public static void transponse(double A[][]) {
+    private static void transponse(double A[][]) {
 
         double transponsed[][] = new double[A[0].length][A.length];
 
@@ -127,7 +129,81 @@ public class MatrixMuveletek {
         }
     }
 
-    public static void printMatrix(double A[][]) {
+    private static void gaussElimination(double A[][], double b[]) {
+
+        int N  = b.length;
+
+        for (int p = 0; p < N; p++) {
+
+            // find pivot row and swap
+            int max = p;
+            for (int i = p + 1; i < N; i++) {
+                if (abs(A[i][p]) > abs(A[max][p])) {
+                    max = i;
+                }
+            }
+            double[] temp = A[p]; A[p] = A[max]; A[max] = temp;
+            double   t    = b[p]; b[p] = b[max]; b[max] = t;
+
+            // singular or nearly singular
+            if (abs(A[p][p]) <= EPSILON) {
+                throw new RuntimeException("Matrix is singular or nearly singular");
+            }
+
+            // pivot within A and b
+            for (int i = p + 1; i < N; i++) {
+                double alpha = A[i][p] / A[p][p];
+                b[i] -= alpha * b[p];
+                for (int j = p; j < N; j++) {
+                    A[i][j] -= alpha * A[p][j];
+                }
+            }
+        }
+
+        // back substitution
+        double[] x = new double[N];
+        for (int i = N - 1; i >= 0; i--) {
+            double sum = 0.0;
+            for (int j = i + 1; j < N; j++) {
+                sum += A[i][j] * x[j];
+            }
+            x[i] = (b[i] - sum) / A[i][i];
+        }
+
+        // print results
+        for (int i = 0; i < N; i++) {
+            System.out.println(x[i]);
+        }
+    }
+
+    private static void eigenvalues(double A[][]) {
+
+        double eValues[] = new double[2];
+
+        if( x2x2(A)) {
+
+            double a = 1;
+            double b = ( (-1) * (A[0][0]) ) - A[1][1];
+            double c = A[0][0] * A[1][1];
+
+            System.out.println("a: " + a + ", b: " + b + ", c: " + c);
+
+            double temp1 = sqrt(b * b - 4 * a * c);
+
+            System.out.println(temp1);
+
+            eValues[0] = (-b +  temp1) / (2*a) ;
+            eValues[1] = (-b -  temp1) / (2*a) ;
+        }
+
+        for(int i = 0; i < eValues.length; i++) {
+            System.out.println(i + ". sajatertek " + eValues[i]);
+        }
+    }
+
+
+
+    private static void printMatrix(double A[][]) {
         for(int i = 0; i < A.length; i++) {
             for(int j=0; j < A[0].length; j++) {
                 System.out.print(A[i][j] + ", ");
@@ -136,7 +212,7 @@ public class MatrixMuveletek {
         }
     }
 
-    public static Boolean x2x2(double A[][]) {
+    private static Boolean x2x2(double A[][]) {
         if( (A.length == 2 && A[0].length == 2) ){
             return true;
         } else {
@@ -144,7 +220,7 @@ public class MatrixMuveletek {
         }
     }
 
-    public static Boolean canMultiply(double A[][], double B[][]) {
+    private static Boolean canMultiply(double A[][], double B[][]) {
         if( A[0].length == B.length) {
             return true;
         } else {
@@ -182,6 +258,37 @@ public class MatrixMuveletek {
 
         double K[] = {10};
 
+        double gP1[][] = {
+                {2, 7, 1},
+                {4, 0, 3},
+                {1, 3, 1}
+        };
+
+        double gP2[] = {1, -1, -1};
+
+        double[][] gP3 = {
+                { 1, 5, -2 },
+                { 2, 3, 1 },
+                { 2, 4, -3 }
+        };
+
+        double[] gP4 = { 2, 5, 2 };
+
+        double eP[][] = {
+                {0, 1},
+                {-2, -3}
+        };
+
+        double eP2[][] = {
+                {2, 2},
+                {2, 2}
+        };
+
+        double eP3[][] = {
+                {3, 0},
+                {8, -1}
+        };
+
         osszeadas(P1, P2);
         System.out.println();
         kivonas(P1, P2);
@@ -195,5 +302,10 @@ public class MatrixMuveletek {
         determinant(P1);
         System.out.println();
         transponse(P5);
+        System.out.println();
+        gaussElimination(gP3, gP4);
+        System.out.println();
+        eigenvalues(eP3);
+
     }
 }
