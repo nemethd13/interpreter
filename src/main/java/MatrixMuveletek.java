@@ -184,13 +184,9 @@ public class MatrixMuveletek {
 
             double a = 1;
             double b = ( (-1) * (A[0][0]) ) - A[1][1];
-            double c = A[0][0] * A[1][1];
-
-            System.out.println("a: " + a + ", b: " + b + ", c: " + c);
+            double c = (A[0][0] * A[1][1]) - (A[0][1] * A[1][0]);
 
             double temp1 = sqrt(b * b - 4 * a * c);
-
-            System.out.println(temp1);
 
             eValues[0] = (-b +  temp1) / (2*a) ;
             eValues[1] = (-b -  temp1) / (2*a) ;
@@ -201,7 +197,78 @@ public class MatrixMuveletek {
         }
     }
 
+    private static void eigenvectors(double A[][]){
 
+        double eValues[] = new double[2];
+        double eVectors[][] = new double[2][2];
+
+        if( x2x2(A)) {
+
+            double a = 1;
+            double b = ( (-1) * (A[0][0]) ) - A[1][1];
+            double c = (A[0][0] * A[1][1]) - (A[0][1] * A[1][0]);
+
+            double temp1 = sqrt(b * b - 4 * a * c);
+
+            eValues[0] = (-b +  temp1) / (2*a) ;
+            eValues[1] = (-b -  temp1) / (2*a) ;
+        }
+
+        if(A[0][1] == 0 && A[1][0] == 0) {
+            eVectors[0][0] = 1;
+            eVectors[0][1] = 0;
+
+            eVectors[1][0] = 0;
+            eVectors[1][1] = 1;
+
+            for (int i = 0; i < 2; i++) {
+                System.out.println(i + 1 + ". eigenvector: ");
+                for(int j = 0; j < 2; j++) {
+                    System.out.println(eVectors[i][j]);
+                }
+                System.out.println();
+            }
+
+            return;
+        }
+
+        if(A[1][0] != 0) {
+            eVectors[0][0] = eValues[0] - A[1][1];
+            eVectors[0][1] = A[1][0];
+
+            eVectors[1][0] = eValues[1] - A[1][1];
+            eVectors[1][1] = A[1][0];
+
+            for (int i = 0; i < 2; i++) {
+                System.out.println(i + 1 + ". eigenvector: ");
+                for(int j = 0; j < 2; j++) {
+                    System.out.println(eVectors[i][j]);
+                }
+                System.out.println();
+            }
+
+            return;
+        }
+
+        if(A[0][1] != 0) {
+            eVectors[0][0] = A[0][1];
+            eVectors[0][1] = eValues[0] - A[0][0];
+
+            eVectors[1][0] = A[0][1];
+            eVectors[1][1] = eValues[1] - A[0][0];
+
+            for (int i = 0; i < 2; i++) {
+                System.out.println(i + 1 + ". eigenvector: ");
+                for(int j = 0; j < 2; j++) {
+                    System.out.println(eVectors[i][j]);
+                }
+                System.out.println();
+            }
+
+            return;
+        }
+
+    }
 
     private static void printMatrix(double A[][]) {
         for(int i = 0; i < A.length; i++) {
@@ -305,7 +372,9 @@ public class MatrixMuveletek {
         System.out.println();
         gaussElimination(gP3, gP4);
         System.out.println();
-        eigenvalues(eP3);
+        eigenvalues(eP2);
+        System.out.println();
+        eigenvectors(eP2);
 
     }
 }
